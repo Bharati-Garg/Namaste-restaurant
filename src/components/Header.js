@@ -1,29 +1,65 @@
-import { LOGO_URL } from "../utils/constants";
-import { useState } from "react";
-
+import { useState, useContext } from "react";
+import { Link } from "react-router-dom";
+import useOnlineStatus from "../utils/useOnlineStatus";
+import UserContext from "../utils/UserContext";
+import { useSelector } from "react-redux";
 const Header = () => {
   const [btnNameReact, setBtnNameReact] = useState("login");
+  const onlineStatus = useOnlineStatus();
+  const { loggedInUser } = useContext(UserContext);
+  const cartItems = useSelector((store) => store.cart.items);
+  //console.log(loggedInUser);
   return (
-    <div className="header">
+    <div className="flex justify-between bg-pink-200 sm:bg-yellow-200 lg:bg-green-200 font-[500]">
       <div className="logo-container">
-        <img src={LOGO_URL} alt="" className="logo" />
+        <Link to="/">
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/3655/3655682.png"
+            alt="Logo"
+            className="logo w-10 mt-5 ms-5"
+          />
+        </Link>
       </div>
-      <div className="nav-items">
-        <ul>
-          <li>Home</li>
-          <li>About Us</li>
-          <li>Contact US</li>
-          <li>Cart</li>
+      <div className="flex items-center">
+        <ul className="flex p-4 m-4">
+          <li className="px-4">Online Status: {onlineStatus ? "✅" : "⛔"}</li>
+          <li className="px-4">
+            <Link to="/" className="links">
+              Home
+            </Link>
+          </li>
+          <li className="px-4">
+            <Link to="/about" className="links">
+              About Us
+            </Link>
+          </li>
+          <li className="px-4">
+            <Link to="/contact" className="links">
+              Contact Us
+            </Link>
+          </li>
+          <li className="px-4">
+            <Link to="/grocery" className="links">
+              Grocery
+            </Link>
+          </li>
+          <li className="px-4 font-bold text-xl">
+            <Link to="/cart"> Cart- ({cartItems.length} items)</Link>
+          </li>
           <button
-            className="login"
+            className="loginBtn"
             onClick={() => {
-              btnNameReact === "login"
-                ? setBtnNameReact("logout")
-                : setBtnNameReact("login");
+              btnNameReact === "Login"
+                ? setBtnNameReact("Logout")
+                : setBtnNameReact("Login");
+              console.log(btnNameReact);
             }}
           >
             {btnNameReact}
           </button>
+          <li className="px-4 font-bold">
+            <Link className="links">{loggedInUser}</Link>
+          </li>
         </ul>
       </div>
     </div>
